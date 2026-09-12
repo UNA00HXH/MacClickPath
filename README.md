@@ -26,15 +26,15 @@ It is designed to reduce repetitive permission clicks during development.
 ### Requirements
 
 - macOS
-- Python 3
-- `pyautogui`
+- Python 3.9 or newer
+- The Python dependency listed in [`requirements.txt`](requirements.txt)
 
 ### Installation
 
 Install the required dependency:
 
 ```bash
-python3 -m pip install pyautogui
+python3 -m pip install -r requirements.txt
 ```
 
 Verify the installation:
@@ -51,13 +51,21 @@ pyautogui OK
 
 ### Usage
 
-Run the script:
+First, use the coordinate helper:
 
 ```bash
-python3 main.py
+python3 get_position.py
 ```
 
-Follow the terminal instructions to configure the position of the **"Allow Once"** button.
+Move the cursor to the **"Allow Once"** button within three seconds, record the printed coordinates, and update `x` and `y` in `click_allow.py`. Then run:
+
+```bash
+python3 click_allow.py
+```
+
+The script waits three seconds and clicks the configured position once.
+
+> Warning: this tool clicks a fixed screen position. Confirm that the target is the intended **"Allow Once"** button before running it.
 
 ### macOS Permission
 
@@ -104,15 +112,15 @@ If the mouse clicks the wrong position, configure the button coordinates again.
 ### 环境要求
 
 - macOS
-- Python 3
-- `pyautogui`
+- Python 3.9 或更高版本
+- [`requirements.txt`](requirements.txt) 中列出的 Python 依赖
 
 ### 安装
 
 安装依赖：
 
 ```bash
-python3 -m pip install pyautogui
+python3 -m pip install -r requirements.txt
 ```
 
 检查是否安装成功：
@@ -131,13 +139,21 @@ pyautogui OK
 
 ### 使用方法
 
-运行：
+先运行坐标获取脚本：
 
 ```bash
-python3 main.py
+python3 get_position.py
 ```
 
-按照终端提示配置 **「允许一次 / Allow Once」** 按钮的位置即可。
+在倒计时结束前将鼠标移动到 **「允许一次 / Allow Once」** 按钮上，记录输出的坐标，然后修改 `click_allow.py` 中的 `x` 和 `y`。最后运行：
+
+```bash
+python3 click_allow.py
+```
+
+脚本等待 3 秒后点击配置好的坐标。
+
+> 注意：程序会点击固定屏幕坐标。运行前请确认目标确实是 **「允许一次 / Allow Once」** 按钮。
 
 ### macOS 权限设置
 
