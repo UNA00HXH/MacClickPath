@@ -1,9 +1,35 @@
-# Codex Auto Allow
+# ClickFlow
 
-> Stop clicking "Allow Once" manually.  
-> 告别手动点击 Codex「允许一次」。
+> A lightweight mouse automation tool for macOS.<br>
+> 轻量级 macOS 鼠标自动化工具。
 
 [English](#english) | [中文](#中文)
+
+---
+
+## Architecture / 项目架构
+
+```text
+click/
+├── app.py                       # Tkinter 窗口、执行编排与程序入口
+├── clickflow/
+│   ├── __init__.py              # 对外导出的公共接口
+│   ├── models.py                # Step、执行状态和权限状态
+│   ├── steps.py                 # 步骤校验、鼠标操作和时间格式化
+│   └── accessibility.py         # macOS 辅助功能权限与系统设置入口
+├── tests/
+│   ├── test_steps.py            # 步骤校验与动作语义
+│   ├── test_execution.py        # 顺序、暂停、停止、异常和统计
+│   ├── test_accessibility.py    # macOS 权限处理
+│   └── test_gui_acceptance.py   # 不操作真实鼠标的 GUI 集成验收
+├── click_allow.py               # 原有单次点击命令行脚本
+├── get_position.py              # 原有坐标获取命令行脚本
+└── requirements.txt
+```
+
+`app.py` 是界面层，通过 `clickflow` 包调用业务和系统能力。鼠标操作集中在
+`clickflow.steps`，macOS 权限处理集中在 `clickflow.accessibility`，测试可以分别
+替换这些边界，因此不会在自动测试中误操作真实鼠标。
 
 ---
 
@@ -11,9 +37,11 @@
 
 ### Introduction
 
-**Codex Auto Allow** is a tiny Python utility for macOS that helps automatically move the mouse cursor and click the **"Allow Once"** button when using Codex.
+**ClickFlow** is a lightweight Python utility for building and running mouse
+automation workflows on macOS.
 
-It is designed to reduce repetitive permission clicks during development.
+It lets you arrange move and click steps with configurable coordinates and
+wait times, reducing repetitive mouse operations.
 
 ### Features
 
@@ -21,7 +49,7 @@ It is designed to reduce repetitive permission clicks during development.
 - ⚡ Lightweight and simple
 - 🐍 Built with Python
 - 💻 Designed for macOS
-- 🔧 Works with Codex workflows in VS Code
+- 🧩 Supports configurable, ordered action steps
 
 ### Requirements
 
@@ -51,7 +79,23 @@ pyautogui OK
 
 ### Usage
 
-First, use the coordinate helper:
+Launch the desktop application:
+
+```bash
+python3 app.py
+```
+
+The window displays the live mouse position and can capture a coordinate after
+a three-second countdown. On macOS, it also shows the current Accessibility
+permission status. Use the step editor to add, edit, delete, and reorder move
+or click actions, each with its own coordinate and pre-action wait time. The
+execution controls support a three-second start countdown, pause, resume, and
+stop. Moving the pointer to the upper-left corner triggers PyAutoGUI's
+emergency stop. The execution panel reports the current state and step,
+highlights the active row, and tracks active run time and completed operations.
+
+The original command-line helpers are still available. To use the coordinate
+helper:
 
 ```bash
 python3 get_position.py
@@ -61,6 +105,12 @@ Move the cursor to the **"Allow Once"** button within three seconds, record the 
 
 ```bash
 python3 click_allow.py
+```
+
+Run the automated test suite with:
+
+```bash
+python3 -m unittest discover -s tests -v
 ```
 
 The script waits three seconds and clicks the configured position once.
@@ -97,9 +147,9 @@ If the mouse clicks the wrong position, configure the button coordinates again.
 
 ### 简介
 
-**Codex Auto Allow** 是一个用于 macOS 的轻量级 Python 小工具。
+**ClickFlow** 是一个用于 macOS 的轻量级 Python 鼠标自动化工具。
 
-在使用 Codex 开发时，它可以帮助你自动移动鼠标并点击 **「允许一次 / Allow Once」** 按钮，减少反复手动确认权限的操作。
+它可以编排带有自定义坐标和等待时间的移动、点击步骤，减少重复鼠标操作。
 
 ### 功能
 
@@ -107,7 +157,7 @@ If the mouse clicks the wrong position, configure the button coordinates again.
 - ⚡ 轻量、简单
 - 🐍 基于 Python
 - 💻 面向 macOS
-- 🔧 适用于 VS Code 中的 Codex 工作流
+- 🧩 支持可配置、可排序的操作步骤
 
 ### 环境要求
 
@@ -139,7 +189,20 @@ pyautogui OK
 
 ### 使用方法
 
-先运行坐标获取脚本：
+启动桌面应用：
+
+```bash
+python3 app.py
+```
+
+窗口会实时显示鼠标位置，并可在 3 秒倒计时后将坐标填入步骤表单。在
+macOS 上，窗口还会显示当前的辅助功能权限状态。步骤编辑器支持添加、
+编辑、删除和调整“移动”“点击”操作的顺序，每一步可独立设置坐标和执行前等待时间。
+执行区支持开始前 3 秒倒计时、暂停、继续和停止；将鼠标移动到屏幕左上角可触发
+PyAutoGUI 紧急停止。执行区还会显示当前状态和步骤、高亮正在执行的步骤，并统计
+本次有效运行时间与已完成操作数；暂停期间不计时。
+
+原有命令行脚本仍然可用。如需使用坐标获取脚本：
 
 ```bash
 python3 get_position.py
@@ -149,6 +212,12 @@ python3 get_position.py
 
 ```bash
 python3 click_allow.py
+```
+
+运行自动测试：
+
+```bash
+python3 -m unittest discover -s tests -v
 ```
 
 脚本等待 3 秒后点击配置好的坐标。
@@ -183,6 +252,6 @@ python3 click_allow.py
 
 ## Disclaimer / 免责声明
 
-This project is a small automation utility intended for personal development workflows. Please review Codex actions before granting permissions.
+This project is a small automation utility intended for personal workflows. Always verify the target before running an automated click sequence.
 
-本项目是用于个人开发工作流的简单自动化工具。建议在授予权限前确认 Codex 即将执行的操作。
+本项目是用于个人工作流的简单自动化工具。执行自动点击序列前，请始终确认目标位置正确。

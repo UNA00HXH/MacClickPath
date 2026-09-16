@@ -1,7 +1,7 @@
 import time
 import pyautogui
 
-# 给你 3 秒钟切换回 Codex 窗口
+# 给你 3 秒钟切换到目标窗口
 print("3 秒后点击「允许一次」...")
 time.sleep(3)
 
