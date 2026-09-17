@@ -22,6 +22,11 @@ class StepValidationTests(unittest.TestCase):
 
         self.assertEqual(step, Step("click", 100, 200, 0.0))
 
+    def test_builds_double_click_step(self) -> None:
+        step = validate_step_input("双击", "100", "200", "0")
+
+        self.assertEqual(step, Step("double_click", 100, 200, 0.0))
+
     def test_rejects_empty_coordinates(self) -> None:
         with self.assertRaisesRegex(ValueError, "不能为空"):
             validate_step_input("移动", "", "200", "0.5")
@@ -56,6 +61,14 @@ class StepExecutionTests(unittest.TestCase):
 
         sleep.assert_called_once_with(1.0)
         click.assert_called_once_with(30, 40)
+
+    @patch("clickflow.steps.time.sleep")
+    @patch("clickflow.steps.pyautogui.doubleClick")
+    def test_double_click_is_one_atomic_step(self, double_click, sleep) -> None:
+        perform_step(Step("double_click", 30, 40, 0.0))
+
+        sleep.assert_called_once_with(0.0)
+        double_click.assert_called_once_with(30, 40, interval=0.1)
 
 
 if __name__ == "__main__":

@@ -15,15 +15,14 @@ click/
 ├── clickflow/
 │   ├── __init__.py              # 对外导出的公共接口
 │   ├── models.py                # Step、执行状态和权限状态
-│   ├── steps.py                 # 步骤校验、鼠标操作和时间格式化
+│   ├── steps.py                 # 步骤校验、鼠标操作和
+时间格式化
 │   └── accessibility.py         # macOS 辅助功能权限与系统设置入口
 ├── tests/
 │   ├── test_steps.py            # 步骤校验与动作语义
 │   ├── test_execution.py        # 顺序、暂停、停止、异常和统计
 │   ├── test_accessibility.py    # macOS 权限处理
 │   └── test_gui_acceptance.py   # 不操作真实鼠标的 GUI 集成验收
-├── click_allow.py               # 原有单次点击命令行脚本
-├── get_position.py              # 原有坐标获取命令行脚本
 └── requirements.txt
 ```
 
@@ -40,7 +39,7 @@ click/
 **ClickFlow** is a lightweight Python utility for building and running mouse
 automation workflows on macOS.
 
-It lets you arrange move and click steps with configurable coordinates and
+It lets you arrange move, click, and double-click steps with configurable coordinates and
 wait times, reducing repetitive mouse operations.
 
 ### Features
@@ -50,6 +49,7 @@ wait times, reducing repetitive mouse operations.
 - 🐍 Built with Python
 - 💻 Designed for macOS
 - 🧩 Supports configurable, ordered action steps
+- 🖱️ Supports atomic double-clicks for opening files and folders
 
 ### Requirements
 
@@ -87,35 +87,18 @@ python3 app.py
 
 The window displays the live mouse position and can capture a coordinate after
 a three-second countdown. On macOS, it also shows the current Accessibility
-permission status. Use the step editor to add, edit, delete, and reorder move
-or click actions, each with its own coordinate and pre-action wait time. The
+permission status. Use the step editor to add, edit, delete, and reorder move,
+click, or double-click actions, each with its own coordinate and pre-action wait time. The
 execution controls support a three-second start countdown, pause, resume, and
 stop. Moving the pointer to the upper-left corner triggers PyAutoGUI's
 emergency stop. The execution panel reports the current state and step,
 highlights the active row, and tracks active run time and completed operations.
-
-The original command-line helpers are still available. To use the coordinate
-helper:
-
-```bash
-python3 get_position.py
-```
-
-Move the cursor to the **"Allow Once"** button within three seconds, record the printed coordinates, and update `x` and `y` in `click_allow.py`. Then run:
-
-```bash
-python3 click_allow.py
-```
 
 Run the automated test suite with:
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
-
-The script waits three seconds and clicks the configured position once.
-
-> Warning: this tool clicks a fixed screen position. Confirm that the target is the intended **"Allow Once"** button before running it.
 
 ### macOS Permission
 
@@ -149,7 +132,7 @@ If the mouse clicks the wrong position, configure the button coordinates again.
 
 **ClickFlow** 是一个用于 macOS 的轻量级 Python 鼠标自动化工具。
 
-它可以编排带有自定义坐标和等待时间的移动、点击步骤，减少重复鼠标操作。
+它可以编排带有自定义坐标和等待时间的移动、单击和双击步骤，减少重复鼠标操作。
 
 ### 功能
 
@@ -158,6 +141,7 @@ If the mouse clicks the wrong position, configure the button coordinates again.
 - 🐍 基于 Python
 - 💻 面向 macOS
 - 🧩 支持可配置、可排序的操作步骤
+- 🖱️ 支持用于打开文件和文件夹的原子双击
 
 ### 环境要求
 
@@ -197,32 +181,16 @@ python3 app.py
 
 窗口会实时显示鼠标位置，并可在 3 秒倒计时后将坐标填入步骤表单。在
 macOS 上，窗口还会显示当前的辅助功能权限状态。步骤编辑器支持添加、
-编辑、删除和调整“移动”“点击”操作的顺序，每一步可独立设置坐标和执行前等待时间。
+编辑、删除和调整“移动”“点击”“双击”操作的顺序，每一步可独立设置坐标和执行前等待时间。
 执行区支持开始前 3 秒倒计时、暂停、继续和停止；将鼠标移动到屏幕左上角可触发
 PyAutoGUI 紧急停止。执行区还会显示当前状态和步骤、高亮正在执行的步骤，并统计
 本次有效运行时间与已完成操作数；暂停期间不计时。
-
-原有命令行脚本仍然可用。如需使用坐标获取脚本：
-
-```bash
-python3 get_position.py
-```
-
-在倒计时结束前将鼠标移动到 **「允许一次 / Allow Once」** 按钮上，记录输出的坐标，然后修改 `click_allow.py` 中的 `x` 和 `y`。最后运行：
-
-```bash
-python3 click_allow.py
-```
 
 运行自动测试：
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
-
-脚本等待 3 秒后点击配置好的坐标。
-
-> 注意：程序会点击固定屏幕坐标。运行前请确认目标确实是 **「允许一次 / Allow Once」** 按钮。
 
 ### macOS 权限设置
 

@@ -9,6 +9,7 @@ from .models import LABEL_ACTIONS, Step
 
 
 pyautogui.FAILSAFE = True
+DOUBLE_CLICK_INTERVAL_SECONDS = 0.1
 
 
 def validate_step_input(
@@ -21,7 +22,7 @@ def validate_step_input(
 
     action = LABEL_ACTIONS.get(action_label.strip())
     if action is None:
-        raise ValueError("请选择“移动”或“点击”操作。")
+        raise ValueError("请选择“移动”“点击”或“双击”操作。")
 
     if not x_text.strip() or not y_text.strip():
         raise ValueError("X 和 Y 坐标不能为空。")
@@ -64,6 +65,12 @@ def perform_action(step: Step) -> None:
         pyautogui.moveTo(step.x, step.y)
     elif step.action == "click":
         pyautogui.click(step.x, step.y)
+    elif step.action == "double_click":
+        pyautogui.doubleClick(
+            step.x,
+            step.y,
+            interval=DOUBLE_CLICK_INTERVAL_SECONDS,
+        )
     else:
         raise ValueError(f"未知操作类型：{step.action}")
 

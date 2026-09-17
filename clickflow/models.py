@@ -4,7 +4,11 @@ from dataclasses import dataclass
 from enum import Enum
 
 
-ACTION_LABELS = {"move": "移动", "click": "点击"}
+ACTION_LABELS = {
+    "move": "移动",
+    "click": "点击",
+    "double_click": "双击",
+}
 LABEL_ACTIONS = {label: action for action, label in ACTION_LABELS.items()}
 
 
