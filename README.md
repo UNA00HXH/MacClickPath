@@ -1,5 +1,7 @@
 # ClickFlow
 
+#本工具的灵感来源于作者本人的朋友大一下期末赶welearn的作业刷时长，平台要求30min内要有操作，否则就会自动退出，他叫豆包写了个小脚本让鼠标在welearn的翻页界面反复点，这样就不会自己时不时点一下了，难道他真的是天才？(= 3 =)
+
 > A lightweight mouse automation tool for macOS.<br>
 > 轻量级 macOS 鼠标自动化工具。
 
