@@ -1,3 +1,5 @@
 # Tkinter is included with the Python installer and is not a pip package.
 # Use Python 3.9+ built with Tk/Tcl support.
 pyautogui>=0.9.54,<1.0
+Pillow>=9.2,<13
+pyobjc-framework-Quartz>=9; platform_system == "Darwin"

@@ -1,5 +1,6 @@
 """macOS GUI integration checks that never control the real mouse."""
 
+import os
 import platform
 import time
 import unittest
@@ -10,7 +11,10 @@ from app import ClickFlowApp
 from clickflow.models import AccessibilityPermission, ExecutionState, Step
 
 
-@unittest.skipUnless(platform.system() == "Darwin", "macOS Tk integration test")
+@unittest.skipUnless(
+    platform.system() == "Darwin" and os.environ.get("CLICKFLOW_GUI_TESTS") == "1",
+    "set CLICKFLOW_GUI_TESTS=1 in a macOS GUI session",
+)
 class GuiAcceptanceTests(unittest.TestCase):
     def setUp(self) -> None:
         permission_patch = patch(
@@ -58,7 +62,8 @@ class GuiAcceptanceTests(unittest.TestCase):
         self._pump_until(ExecutionState.COMPLETED)
 
         self.assertEqual(
-            [call.args[0] for call in perform_action.call_args_list], steps
+            [call.args[0] for call in perform_action.call_args_list],
+            [step.action for step in steps],
         )
         self.assertEqual(self.window.step_progress.get(), "当前步骤：2 / 2")
         self.assertEqual(self.window.completed_display.get(), "已完成操作：2 次")
